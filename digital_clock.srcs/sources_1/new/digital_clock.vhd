@@ -5,7 +5,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity digital_clock is
  port (
          clk : in  std_logic;
-         btnC : in std_logic; 			
+         btnC : in std_logic;
+         btnU : in std_logic;
+         btnD : in std_logic;
+         btnL : in std_logic;
+         btnR : in std_logic;	
          an : out std_logic_vector(0 TO 3);
          seg : out std_logic_vector(0 TO 6)
        ); 					
@@ -25,6 +29,10 @@ sec_cnt : entity work.seconds_counter
 port map(
     clock => clk,
     reset => btnC,
+    hour_up => btnU,
+    hour_down => btnD,
+    minute_up => btnR,
+    minute_down => btnL,
     seconds => seconds
     );
 

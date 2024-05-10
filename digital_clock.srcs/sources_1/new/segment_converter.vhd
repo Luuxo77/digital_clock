@@ -13,7 +13,7 @@ entity segments_converter is
     );
 end segments_converter;
 
-architecture behavioural of segments_converter is
+architecture behavioral of segments_converter is
 
   signal hours : natural range 0 to 24;
   signal minutes : natural range 0 to 59;
@@ -65,4 +65,4 @@ begin
   minutes_first_digit_seg <= to_segments(minutes_first_digit);
   minutes_second_digit_seg <= to_segments(minutes_second_digit);
   
-end architecture behavioural;
+end architecture behavioral;
