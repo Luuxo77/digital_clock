@@ -25,7 +25,7 @@ signal selector : natural range 0 to 3 := 0;
 
 begin
 
-anode_clock : process (counter, clock, selector) is
+anode_clock : process (clock) is
 begin
 
     if rising_edge(clock) then
