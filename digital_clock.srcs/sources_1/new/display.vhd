@@ -1,39 +1,47 @@
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
 
 entity display is
-    port 
-    (
-        clock : in  std_logic;
+    generic (
+        CLOCK_FREQUENCY : natural := 100_000_000
+    );
+    port (
+        clock : in std_logic;
         hours_first_digit_seg : in std_logic_vector(0 TO 6);
         hours_second_digit_seg : in std_logic_vector(0 TO 6);
         minutes_first_digit_seg : in std_logic_vector(0 TO 6);
         minutes_second_digit_seg: in std_logic_vector(0 TO 6);		
         anode : out std_logic_vector(0 TO 3);
         segments : out std_logic_vector(0 TO 6)
-    );				
+    );
 end display;
          
 architecture behavioral of display is
 
-signal count1 : integer := 0;
-signal selector : integer range 0 to 3 := 0;
+constant REFRESH_FREQUENCY : natural := CLOCK_FREQUENCY / 400;
+signal counter : natural range 0 to REFRESH_FREQUENCY - 1 := 0;
+signal selector : natural range 0 to 3 := 0;
 
 begin
 
-anode_clock : process(count1, clock, selector)
+anode_clock : process (counter, clock, selector) is
 begin
-    if (rising_edge(clock)) then
-        count1 <= count1 + 1;
-        if (count1 = 249999) then
-            selector <= selector + 1;
-            count1 <= 0;
+
+    if rising_edge(clock) then
+        if (counter = REFRESH_FREQUENCY - 1) then
+            selector <= (selector + 1) mod 4;
+            counter <= 0;
+        else
+            counter <= counter + 1;
         end if;
     end if;
+    
 end process;
 
-anode_display : process(selector) begin
+anode_display : process (selector) is
+begin
+
     case selector is
         when 0 =>
             anode <= "1110";
@@ -48,6 +56,7 @@ anode_display : process(selector) begin
             anode <= "0111";
             segments <= hours_first_digit_seg;
         end case;
+        
 end process;        
 
 end behavioral;
